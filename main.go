@@ -6,6 +6,7 @@ import (
     "flag"
     //"log"
     "gas/httpServer"
+    "gas/libs/log"
     "strconv"
 )
 
@@ -18,5 +19,6 @@ func main(){
     fmt.Println(*Cnum)
     maxNum, _ := strconv.Atoi(*Cnum)
     httpServer.SetMaxTaskNum(maxNum)
+    log.Init()
     httpServer.Init();
 }

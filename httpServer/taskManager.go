@@ -3,7 +3,8 @@ package httpServer
 import (
     "fmt"
     "gas/libs/curl"
-    "strconv"
+    "gas/libs/log"
+    "go.uber.org/zap"
 )
 
 //任务管理
@@ -48,12 +49,19 @@ func (Task *TaskManager) doRequest(requestInfo *RequestData, gch chan bool){
         SetMethod("GET").
         Send()
     if err != nil {
-        fmt.Println("request is fail")
+        log.InfoLogger.Info("request fail, service is bad", zap.String("errorCode", "E500"), zap.String("RequestUrl", RequestUrl))
     } else {
         if resp.IsOk() {
-            fmt.Println("request service is ok, responseData:"+resp.Body)
+            log.InfoLogger.Info("request is Ok",
+                zap.String("errorCode", "E200"),
+                zap.String("RequestUrl", RequestUrl),
+                zap.String("response", resp.Body),
+                zap.Int("httpStatus", resp.Raw.StatusCode))
         } else {
-            fmt.Println("httpStatus:"+ strconv.Itoa(resp.Raw.StatusCode))
+            log.InfoLogger.Info("request is fail",
+                zap.String("errorCode", "E400"),
+                zap.String("RequestUrl", RequestUrl),
+                zap.Int("httpStatus", resp.Raw.StatusCode),)
         }
     }
     <-gch
