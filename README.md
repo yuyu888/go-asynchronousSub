@@ -3,6 +3,7 @@
 
 # 运行
 go init mod gas
+
 go run main.go
 
 测试url ： http://localhost/call?action=test1&msgData=22222
